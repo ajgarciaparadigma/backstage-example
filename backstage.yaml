@@ -5,6 +5,7 @@ metadata:
   description: The Example of kafka producer.
   tags:
     - kafka
+    - java
   links:
     - url: https://github.com/ajgarciaparadigma/backstage-example/backstage.yaml
       title: Source Code
@@ -13,6 +14,7 @@ spec:
   type: asyncapi
   lifecycle: production
   owner: sigo-team
+  system: satellital-order
   definition: |
     asyncapi: '3.0.0'
     info:
