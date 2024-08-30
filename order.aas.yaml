@@ -1,0 +1,55 @@
+asyncapi: '3.0.0'
+info:
+  title: Order Management API
+  version: '1.0.0'
+  description: |
+    Esta API gestiona pedidos y utiliza eventos en el formato de CloudEvents.
+
+servers:
+  kafka-local:
+    host: localhost:9092
+    protocol: kafka
+    description: Servidor de Kafka
+
+channels:
+  billing.crm.sales:
+    description: Canal donde se publican los eventos de creaciÃ³n de pedidos
+    summary: Publicar un evento cuando se crea un pedido
+    messages:
+      OrderCreatedEvent:
+        $ref: '#/components/messages/OrderCreatedEvent'
+
+operations:
+  createOrder:
+    action: 'send'
+    channel:
+      $ref: '#/channels/billing.crm.sales'
+  receiveOrder:
+    action: 'receive'
+    channel:
+      $ref: '#/channels/billing.crm.sales'
+
+components:
+  messages:
+    OrderCreatedEvent:
+      name: OrderCreatedEvent
+      title: Evento de Pedido Creado
+      summary: Este evento se emite cuando se crea un nuevo pedido.
+      contentType: application/cloudevents+json
+      bindings:
+        kafka:
+          key:
+            type: string
+            description: Store
+      payload:
+        schemaFormat: 'application/vnd.apache.avro;version=1.9.0'
+        schema:
+          type: record
+          name: UserOrder
+          namespace: com.hispasat.poc.model
+          doc: User order information
+          fields:
+            - name: orderId
+              type: string
+            - name: customerId
+              type: string
